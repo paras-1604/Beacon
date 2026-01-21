@@ -532,6 +532,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -1072,6 +1073,10 @@ fun BeaconHomeScreen(
     gpsStatus: String = "ACTIVE",
     p2pStatus: String = "MESH: 3"
 ) {
+    var showCustomMessageDialog by remember { mutableStateOf(false) }
+    var showCustomMessageSentToast by remember { mutableStateOf(false) }
+    var lastSentMessage by remember { mutableStateOf("") }
+
     var showSheet by remember { mutableStateOf(false) }
     var selectedSeverity by remember { mutableStateOf<SeverityLevel?>(null) }
     var showCountdown by remember { mutableStateOf(false) }
@@ -1156,24 +1161,36 @@ fun BeaconHomeScreen(
                 }
 
                 // System status
+                // System status
+                // System status - Compact layout
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End, // Align to end
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SciFiStatusChip(
-                        text = internetStatus,
-                        statusColor = CyberGreen,
-                        icon = "●"
-                    )
-                    SciFiStatusChip(
-                        text = gpsStatus,
-                        statusColor = SciFiBlue,
-                        icon = "●"
-                    )
-                    SciFiStatusChip(
-                        text = p2pStatus,
-                        statusColor = SciFiPurple,
-                        icon = "●"
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Reduced spacing
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SciFiStatusChip(
+                            text = internetStatus,
+                            statusColor = CyberGreen,
+                            icon = "●",
+                            modifier = Modifier.widthIn(min = 80.dp) // Minimum width
+                        )
+                        SciFiStatusChip(
+                            text = gpsStatus,
+                            statusColor = SciFiBlue,
+                            icon = "●",
+                            modifier = Modifier.widthIn(min = 80.dp)
+                        )
+//                        SciFiStatusChip(
+//                            text = p2pStatus,
+//                            statusColor = SciFiPurple,
+//                            icon = "●",
+//                            modifier = Modifier.widthIn(min = 100.dp) // Slightly wider for MESH text
+//                        )
+                    }
                 }
             }
 
@@ -1257,12 +1274,12 @@ fun BeaconHomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+           // Spacer(modifier = Modifier.height(20.dp))
 
             // Network Visualization
-            NetworkVisualization(peerCount = 3)
+//            NetworkVisualization(peerCount = 3)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
             // Quick Actions
             Row(
@@ -1325,6 +1342,8 @@ fun BeaconHomeScreen(
                 }
             )
         }
+
+
     }
 }
 
