@@ -8,6 +8,8 @@ import kotlinx.coroutines.withContext
 
 class AuthRepository {
 
+    private val authRepository = AuthRepository()
+
     suspend fun signInAnonymously(): Result<String> = withContext(Dispatchers.IO) {
         try {
             // 1. Perform anonymous sign-in (returns Unit or a status object, not the user)
