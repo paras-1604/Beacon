@@ -91,13 +91,5 @@ open, accessible, and ready when the world goes silent.
 
 ---
 
-## 📬 Let's Connect
-
-📧 [your-email@example.com]  
-🔗 [GitHub Repository Link]  
-🎥 [Demo Video Link]
-
----
-
 **BEACON**  
 *Reliable communication saves lives.* 🔥
