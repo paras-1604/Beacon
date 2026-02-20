@@ -19,8 +19,11 @@ composeBom = "2024.09.00"
 benchmarkTraceprocessor = "1.4.1"
 lifecycleViewmodelCompose = "2.10.0"
 lifecycleViewmodelComposeVersion = "2.8.7"
+materialIconsExtended = "1.7.8"
 navigationCompose = "2.9.7"
+navigationComposeVersion = "2.8.5"
 playServicesNearby = "19.3.0"
+roomRuntime = "2.8.4"
 uiGraphics = "1.10.1"
 material3 = "1.4.0"
 foundation = "1.10.1"
@@ -28,6 +31,7 @@ animation = "1.10.1"
 runtime = "1.10.2"
 appcompat = "1.6.1"
 material = "1.10.0"
+foundationVersion = "1.10.3"
 
 [libraries]
 androidx-activity-compose-v193 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -35,7 +39,12 @@ androidx-compose-bom-v20250200 = { module = "androidx.compose:compose-bom", vers
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-compose-v287 = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelComposeVersion" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation-compose-v285 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -62,6 +71,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
@@ -74,6 +84,7 @@ realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 supabase-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 supabase-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
+androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundationVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

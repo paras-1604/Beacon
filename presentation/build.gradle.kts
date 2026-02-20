@@ -41,6 +41,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    implementation(libs.androidx.material.icons.extended)
+
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(platform(libs.androidx.compose.bom.v20250200))
@@ -53,8 +55,12 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.foundation)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.navigation.compose.v285)
 }

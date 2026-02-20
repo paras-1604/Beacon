@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -36,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -56,5 +58,11 @@ dependencies {
 
     // Kotlin serialization
     implementation(libs.kotlinx.serialization.json)
+
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx) // For Kotlin coroutines support
+    kapt(libs.androidx.room.compiler)
 
 }

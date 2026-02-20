@@ -4,14 +4,22 @@ package com.example.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.repository.PreferencesRepository
 import com.example.domain.model.SeverityLevel
+import com.yourorg.beacon.data.repository.PreferencesRepositoryImpl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(preferencesRepository1: PreferencesRepositoryImpl) : ViewModel() {
+
+    private val preferencesRepository: PreferencesRepository
+        get() {
+            TODO()
+        }
+
 
     private val _showCountdown = MutableStateFlow(false)
     val showCountdown: StateFlow<Boolean> = _showCountdown.asStateFlow()
