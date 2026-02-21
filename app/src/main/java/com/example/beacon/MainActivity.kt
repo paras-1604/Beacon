@@ -2,6 +2,7 @@ package com.example.beacon
 
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -16,13 +17,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.core.ui.theme.*
 import com.example.data.AuthRepository
 import com.example.data.repository.ContactRepositoryImpl
+import com.example.data.repository.LocationRepositoryImpl
+import com.example.data.repository.PreferencesRepositoryImpl
 import com.example.presentation.components.BottomNavBar
 import com.example.presentation.screens.auth.AuthScreen
 import com.example.presentation.screens.contacts.ContactsScreen
 import com.example.presentation.screens.contacts.ContactsViewModel
 import com.example.presentation.screens.home.HomeScreen
 import com.example.presentation.screens.home.HomeViewModel
-import com.yourorg.beacon.data.repository.PreferencesRepositoryImpl
 
 
 class MainActivity : ComponentActivity() {
@@ -31,6 +33,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Toast.makeText(this, "NEW CODE IS RUNNING", Toast.LENGTH_LONG).show()
 
         setContent {
             BeaconTheme {
@@ -64,10 +68,16 @@ class MainActivity : ComponentActivity() {
                         val preferencesRepository = remember {
                             PreferencesRepositoryImpl()
                         }
+                        val locationRepository = remember {
+                            LocationRepositoryImpl(
+                                context,
+                                beaconApp.contactDatabase
+                            )
+                        }
 
                         // Create ViewModels
                         val homeViewModel: HomeViewModel = remember {
-                            HomeViewModel(preferencesRepository)
+                            HomeViewModel(preferencesRepository, locationRepository)
                         }
                         val contactsViewModel: ContactsViewModel = remember {
                             ContactsViewModel(contactRepository)

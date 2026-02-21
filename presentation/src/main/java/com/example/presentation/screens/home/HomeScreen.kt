@@ -4,6 +4,7 @@ package com.example.presentation.screens.home
 
 
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -44,6 +45,7 @@ import com.example.domain.model.SeverityLevel
 
 
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
@@ -53,6 +55,7 @@ fun HomeScreen(
     val showToast by viewModel.showToast.collectAsState()
     val showSheet by viewModel.showSheet.collectAsState()
     val selectedSeverity by viewModel.selectedSeverity.collectAsState()
+    val locationState by viewModel.locationState.collectAsState()
 
     // Animated background particles (if you want to keep them)
     val infiniteTransition = rememberInfiniteTransition()
@@ -121,16 +124,49 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Internet chip (still static for now)
                     SciFiStatusChip(
                         text = "ONLINE",
                         statusColor = CyberGreen,
-                        modifier = Modifier.widthIn(min = 80.dp)
+                        modifier = Modifier.widthIn(min = 70.dp)
                     )
-                    SciFiStatusChip(
-                        text = "GPS ACTIVE",
-                        statusColor = SciFiBlue,
-                        modifier = Modifier.widthIn(min = 80.dp)
-                    )
+
+                    // GPS chip - dynamic
+                    when (val state = locationState) {
+                        is LocationUiState.Loading -> {
+                            SciFiStatusChip(
+                                text = "GPS: Acquiring...",
+                                statusColor = Color.White.copy(alpha = 0.5f),
+                                modifier = Modifier.widthIn(min = 100.dp)
+                            )
+                        }
+                        is LocationUiState.Available -> {
+                            val (chipText, chipColor) = when (state.accuracyLevel) {
+                                AccuracyLevel.HIGH -> "GPS: High" to CyberGreen
+                                AccuracyLevel.MEDIUM -> "GPS: Medium" to Color(0xFFFF9800)
+                                AccuracyLevel.LOW -> "GPS: Low" to EmergencyRed
+                            }
+                            SciFiStatusChip(
+                                text = chipText,
+                                statusColor = chipColor,
+                                modifier = Modifier.widthIn(min = 100.dp)
+                            )
+                        }
+                        is LocationUiState.Unavailable -> {
+                            SciFiStatusChip(
+                                text = "GPS: Off",
+                                statusColor = EmergencyRed,
+                                modifier = Modifier.widthIn(min = 100.dp)
+                            )
+                        }
+                    }
+
+                    // Silent mode toggle (already there)
+//                    SciFiSilentToggle(
+//                        isSilent = silentMode,
+//                        onToggle = viewModel::toggleSilentMode
+//                    )
+
                 }
             }
 
@@ -152,6 +188,17 @@ fun HomeScreen(
                     onClick = viewModel::onSosClick,
                     isActive = showCountdown
                 )
+
+
+                if (locationState is LocationUiState.Available) {
+                    val loc = locationState as LocationUiState.Available
+                    Text(
+                        text = String.format("%.4f, %.4f", loc.latitude, loc.longitude),
+                        color = SciFiBlue.copy(alpha = 0.7f),
+                        fontSize = 10.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
 
                 Text(
                     text = "Tap for immediate assistance",

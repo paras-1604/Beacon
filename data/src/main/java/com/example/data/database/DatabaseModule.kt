@@ -10,6 +10,8 @@ object DatabaseModule {
             context.applicationContext,
             ContactDatabase::class.java,
             "beacon_database"
-        ).build()
+        )
+        .fallbackToDestructiveMigration(dropAllTables = true)
+        .build()
     }
 }

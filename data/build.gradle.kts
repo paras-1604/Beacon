@@ -56,13 +56,18 @@ dependencies {
     // Ktor client for Android
     implementation(libs.ktor.client.android)
 
+
+    implementation(libs.kotlinx.coroutines.play.services)
+
     // Kotlin serialization
     implementation(libs.kotlinx.serialization.json)
 
+
+    implementation(libs.play.services.location)
 
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx) // For Kotlin coroutines support
     kapt(libs.androidx.room.compiler)
-
+//    ksp(libs.androidx.room.compiler.v250)
 }

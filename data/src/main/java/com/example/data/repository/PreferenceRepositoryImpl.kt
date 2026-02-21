@@ -1,4 +1,4 @@
-package com.yourorg.beacon.data.repository
+package com.example.data.repository
 
 import com.example.domain.repository.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
