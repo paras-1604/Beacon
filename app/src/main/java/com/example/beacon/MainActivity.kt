@@ -2,6 +2,7 @@ package com.example.beacon
 
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.core.ui.theme.*
 import com.example.data.AuthRepository
+import com.example.data.SupabaseClient
+import com.example.data.repository.AlertRepository
 import com.example.data.repository.ContactRepositoryImpl
 import com.example.data.repository.LocationRepositoryImpl
 import com.example.data.repository.PreferencesRepositoryImpl
@@ -42,10 +45,11 @@ class MainActivity : ComponentActivity() {
                 var isLoading by remember { mutableStateOf(true) }
 
                 LaunchedEffect(Unit) {
-                    authRepository.signInAnonymously().onSuccess {
+                    authRepository.signInAnonymously().onSuccess { userId ->
+                        Log.d("AuthDebug", "✅ Anonymous sign-in success: $userId")
                         isAuthenticated = true
-                    }.onFailure {
-                        // Handle error (maybe show a message)
+                    }.onFailure { error ->
+                        Log.e("AuthDebug", "❌ Anonymous sign-in failed: ${error.message}")
                     }
                     isLoading = false
                 }
@@ -75,9 +79,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        val alertRepository = remember {
+                            AlertRepository(SupabaseClient.client)   // use your existing Supabase client
+                        }
+
                         // Create ViewModels
                         val homeViewModel: HomeViewModel = remember {
-                            HomeViewModel(preferencesRepository, locationRepository)
+                            HomeViewModel(preferencesRepository, locationRepository, alertRepository)
                         }
                         val contactsViewModel: ContactsViewModel = remember {
                             ContactsViewModel(contactRepository)

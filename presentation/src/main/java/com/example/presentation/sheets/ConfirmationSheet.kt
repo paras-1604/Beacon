@@ -67,7 +67,8 @@ fun DetailRow(label: String, value: String, color: Color) {
 fun SciFiConfirmationSheet(
     severity: SeverityLevel,
     onSend: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    locationText: String
 ) {
     ModalBottomSheet(
         onDismissRequest = onCancel,
@@ -134,7 +135,7 @@ fun SciFiConfirmationSheet(
 
                 DetailRow(
                     label = "LOCATION",
-                    value = "GPS coordinates acquired",
+                    value = locationText,
                     color = CyberGreen
                 )
 

@@ -46,15 +46,15 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Supabase BOM (Bill of Materials) - use latest version
-    implementation(platform(libs.bom.v300))
+    api(platform(libs.bom.v300))
 
     // Supabase modules you'll need
-    implementation(libs.supabase.postgrest.kt)  // Database
-    implementation(libs.supabase.auth.kt)       // Authentication
-    implementation(libs.supabase.realtime.kt)   // Real-time (for later)
+    api(libs.supabase.postgrest.kt)  // Database
+    api(libs.supabase.auth.kt)       // Authentication
+    api(libs.supabase.realtime.kt)   // Real-time (for later)
 
     // Ktor client for Android
-    implementation(libs.ktor.client.android)
+    api(libs.ktor.client.android)
 
 
     implementation(libs.kotlinx.coroutines.play.services)

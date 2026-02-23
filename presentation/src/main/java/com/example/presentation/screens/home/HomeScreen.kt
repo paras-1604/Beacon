@@ -53,7 +53,11 @@ fun HomeScreen(
 
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
-
+    val locationText = when (val state = locationState) {
+        is LocationUiState.Available -> String.format("%.4f, %.4f", state.latitude, state.longitude)
+        is LocationUiState.Loading -> "Acquiring GPS..."
+        is LocationUiState.Unavailable -> "GPS Unavailable"
+    }
 
     LaunchedEffect(locationState) {
         Log.d("HomeScreen", "Location state changed: $locationState")
@@ -98,6 +102,8 @@ fun HomeScreen(
                 )
             }
         }
+
+
 
         // Main content
         Column(
@@ -303,10 +309,12 @@ fun HomeScreen(
         }
 
         if (showSheet && selectedSeverity != null) {
+            
             SciFiConfirmationSheet(
                 severity = selectedSeverity!!,
                 onSend = viewModel::onConfirmSheet,
-                onCancel = viewModel::onDismissSheet
+                onCancel = viewModel::onDismissSheet,
+                locationText = locationText
             )
         }
     }

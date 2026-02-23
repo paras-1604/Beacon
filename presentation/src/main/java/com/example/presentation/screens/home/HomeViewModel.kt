@@ -3,10 +3,12 @@ package com.example.presentation.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.repository.AlertRepository
 import com.example.domain.model.Location
 import com.example.domain.model.SeverityLevel
 import com.example.domain.repository.LocationRepository
 import com.example.domain.repository.PreferencesRepository
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +19,10 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val preferencesRepository: PreferencesRepository,
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val alertRepository: AlertRepository
+
+
 ) : ViewModel() {
 
     // Silent mode state
@@ -80,6 +85,14 @@ class HomeViewModel(
                     updateLocationState(location)
                 }
         }
+    }
+
+
+
+    private fun getCurrentUserId(): String {
+        val user = com.example.data.SupabaseClient.client.auth.currentUserOrNull()
+        Log.d("HomeViewModel", "Current user from Supabase: ${user?.id ?: "null"}")
+        return user?.id ?: "unknown"
     }
 
     private fun updateLocationState(location: Location) {
