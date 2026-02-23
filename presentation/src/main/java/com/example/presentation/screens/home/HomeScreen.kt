@@ -1,10 +1,8 @@
 package com.example.presentation.screens.home
 
-
-
-
-
+import android.Manifest
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -14,7 +12,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,20 +28,17 @@ import com.example.core.ui.theme.DarkBg
 import com.example.core.ui.theme.SciFiBlue
 import com.example.core.ui.theme.CyberGreen
 import com.example.core.ui.theme.EmergencyRed
-import  com.example.presentation.components.SciFiStatusChip
-import  com.example.presentation.components.SciFiSOSButton
-import  com.example.presentation.components.SciFiSeverityButton
-import  com.example.presentation.components.SciFiQuickAction
-import  com.example.presentation.components.NetworkNode
-import  com.example.presentation.components.NetworkVisualization
-import  com.example.presentation.sheets.SciFiCountdownOverlay
-import  com.example.presentation.sheets.SciFiAlertToast
-import  com.example.presentation.sheets.SciFiConfirmationSheet
+import com.example.presentation.components.SciFiStatusChip
+import com.example.presentation.components.SciFiSOSButton
+import com.example.presentation.components.SciFiSeverityButton
+import com.example.presentation.components.SciFiQuickAction
+import com.example.presentation.sheets.SciFiCountdownOverlay
+import com.example.presentation.sheets.SciFiAlertToast
+import com.example.presentation.sheets.SciFiConfirmationSheet
 import com.example.domain.model.SeverityLevel
+import com.google.accompanist.permissions.*
 
-
-
-
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
@@ -57,15 +51,31 @@ fun HomeScreen(
     val selectedSeverity by viewModel.selectedSeverity.collectAsState()
     val locationState by viewModel.locationState.collectAsState()
 
-    // Animated background particles (if you want to keep them)
-    val infiniteTransition = rememberInfiniteTransition()
+    val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+
+
+
+    LaunchedEffect(locationState) {
+        Log.d("HomeScreen", "Location state changed: $locationState")
+    }
+
+
+    // Animated background particles
+    val infiniteTransition = rememberInfiniteTransition(label = "backgroundParticles")
     val particleOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 100f,
         animationSpec = infiniteRepeatable(
             animation = tween(5000, easing = LinearEasing)
-        )
+        ),
+        label = "particleOffset"
     )
+
+    LaunchedEffect(Unit) {
+        if (!locationPermissionState.status.isGranted) {
+            locationPermissionState.launchPermissionRequest()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -76,14 +86,14 @@ fun HomeScreen(
                 )
             )
     ) {
-        // Background particles (optional)
+        // Background particles
         Canvas(modifier = Modifier.fillMaxSize()) {
             repeat(20) { i ->
                 val x = (size.width * (i / 20f) + particleOffset) % size.width
                 val y = size.height * (i / 20f)
                 drawCircle(
                     color = SciFiBlue.copy(alpha = 0.1f),
-                    center = Offset(x.toFloat(), y.toFloat()),
+                    center = Offset(x, y),
                     radius = 2.dp.toPx()
                 )
             }
@@ -124,7 +134,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Internet chip (still static for now)
+                    // Internet chip
                     SciFiStatusChip(
                         text = "ONLINE",
                         statusColor = CyberGreen,
@@ -160,13 +170,6 @@ fun HomeScreen(
                             )
                         }
                     }
-
-                    // Silent mode toggle (already there)
-//                    SciFiSilentToggle(
-//                        isSilent = silentMode,
-//                        onToggle = viewModel::toggleSilentMode
-//                    )
-
                 }
             }
 
@@ -189,7 +192,6 @@ fun HomeScreen(
                     isActive = showCountdown
                 )
 
-
                 if (locationState is LocationUiState.Available) {
                     val loc = locationState as LocationUiState.Available
                     Text(
@@ -206,6 +208,13 @@ fun HomeScreen(
                     fontSize = 12.sp
                 )
             }
+
+
+            Text(
+                text = "State: ${locationState::class.simpleName}",
+                color = Color.White,
+                fontSize = 12.sp
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 

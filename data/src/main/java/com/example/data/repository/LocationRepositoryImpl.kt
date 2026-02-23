@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location as AndroidLocation  // alias to avoid name clash
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import com.example.data.database.ContactDatabase
@@ -42,15 +43,18 @@ class LocationRepositoryImpl(
             return@callbackFlow
         }
 
+
+
+
         val locationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY,
-            5000  // update every 5 seconds
-        ).setMinUpdateIntervalMillis(2000)  // at most every 2 seconds
-            .build()
+            Priority.PRIORITY_HIGH_ACCURACY,  // less strict
+            10000
+        ).setMinUpdateIntervalMillis(2000).build()
 
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { location ->
+                    Log.d("LocationRepo", "New location: ${location.latitude}, ${location.longitude}, accuracy: ${location.accuracy}")
                     trySend(location.toDomain())
                 }
             }
@@ -68,7 +72,7 @@ class LocationRepositoryImpl(
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }
     }.map { location ->
-        // Save to database whenever a new location arrives
+        Log.d("LocationRepo", "Emitting to flow: $location")
         saveToDb(location)
         location
     }
@@ -81,6 +85,7 @@ class LocationRepositoryImpl(
         } catch (e: SecurityException) {
             null
         }
+        Log.d("LocationRepo", "Last known: $freshLocation")
         if (freshLocation != null) return freshLocation
 
         // Fallback to database
@@ -89,6 +94,9 @@ class LocationRepositoryImpl(
 
 
         val entity = database.locationDao().getLocation().firstOrNull()
+
+
+        Log.d("LocationRepo", "Cached from DB: $entity")
         return entity?.toDomain()
     }
 

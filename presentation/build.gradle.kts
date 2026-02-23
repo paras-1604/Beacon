@@ -43,6 +43,9 @@ dependencies {
 
     implementation(libs.androidx.material.icons.extended)
 
+
+    implementation(libs.accompanist.permissions)
+
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(platform(libs.androidx.compose.bom.v20250200))

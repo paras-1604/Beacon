@@ -1,5 +1,6 @@
 package com.example.presentation.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Location
@@ -57,6 +58,9 @@ class HomeViewModel(
         viewModelScope.launch {
             // First try last known location
             val lastKnown = locationRepository.getLastKnownLocation()
+
+            Log.d("HomeViewModel", "Last known location: $lastKnown")
+
             if (lastKnown != null) {
                 updateLocationState(lastKnown)
             } else {
@@ -66,9 +70,13 @@ class HomeViewModel(
             // Then live updates
             locationRepository.getLocationUpdates()
                 .catch { e ->
+                    Log.e("HomeViewModel", "Location error", e)
                     _locationState.value = LocationUiState.Unavailable
+
                 }
                 .collect { location ->
+
+                    Log.d("HomeViewModel", "Live location: $location")
                     updateLocationState(location)
                 }
         }
