@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.AlertRepository
+import com.example.domain.model.Alert
 import com.example.domain.model.Location
 import com.example.domain.model.SeverityLevel
 import com.example.domain.repository.LocationRepository
@@ -14,37 +15,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val preferencesRepository: PreferencesRepository,
     private val locationRepository: LocationRepository,
     private val alertRepository: AlertRepository
-
-
 ) : ViewModel() {
 
-    // Silent mode state
     private val _silentMode = MutableStateFlow(false)
     val silentMode: StateFlow<Boolean> = _silentMode.asStateFlow()
 
-    // Location state
     private val _locationState = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
     val locationState: StateFlow<LocationUiState> = _locationState.asStateFlow()
 
-    // Countdown state
     private val _showCountdown = MutableStateFlow(false)
     val showCountdown: StateFlow<Boolean> = _showCountdown.asStateFlow()
 
     private val _countdownValue = MutableStateFlow(5)
     val countdownValue: StateFlow<Int> = _countdownValue.asStateFlow()
 
-    // Toast state
     private val _showToast = MutableStateFlow(false)
     val showToast: StateFlow<Boolean> = _showToast.asStateFlow()
 
-    // Severity sheet state
     private val _showSheet = MutableStateFlow(false)
     val showSheet: StateFlow<Boolean> = _showSheet.asStateFlow()
 
@@ -52,47 +45,36 @@ class HomeViewModel(
     val selectedSeverity: StateFlow<SeverityLevel?> = _selectedSeverity.asStateFlow()
 
     init {
-        // Collect silent mode preference
         viewModelScope.launch {
             preferencesRepository.silentMode.collect { isSilent ->
                 _silentMode.value = isSilent
             }
         }
 
-        // Collect location updates
         viewModelScope.launch {
-            // First try last known location
             val lastKnown = locationRepository.getLastKnownLocation()
-
-            Log.d("HomeViewModel", "Last known location: $lastKnown")
-
             if (lastKnown != null) {
                 updateLocationState(lastKnown)
             } else {
                 _locationState.value = LocationUiState.Unavailable
             }
 
-            // Then live updates
             locationRepository.getLocationUpdates()
                 .catch { e ->
                     Log.e("HomeViewModel", "Location error", e)
                     _locationState.value = LocationUiState.Unavailable
-
                 }
                 .collect { location ->
-
-                    Log.d("HomeViewModel", "Live location: $location")
                     updateLocationState(location)
                 }
         }
     }
 
-
-
-    private fun getCurrentUserId(): String {
+    private fun getCurrentUserId(): String? {
+        // Use the singleton client to get the ID
         val user = com.example.data.SupabaseClient.client.auth.currentUserOrNull()
-        Log.d("HomeViewModel", "Current user from Supabase: ${user?.id ?: "null"}")
-        return user?.id ?: "unknown"
+        Log.d("HomeViewModel", "Current user ID: ${user?.id}")
+        return user?.id
     }
 
     private fun updateLocationState(location: Location) {
@@ -124,11 +106,44 @@ class HomeViewModel(
             if (_countdownValue.value == 0) {
                 _showCountdown.value = false
                 _countdownValue.value = 5
-                _showToast.value = true
-                // TODO: Send alert
-                delay(3000)
-                _showToast.value = false
+                // Trigger major alert on countdown finish
+                triggerAlert(SeverityLevel.MAJOR)
             }
+        }
+    }
+
+    fun onConfirmSheet() {
+        val severity = _selectedSeverity.value ?: SeverityLevel.MINOR
+        _showSheet.value = false
+        triggerAlert(severity)
+    }
+
+    private fun triggerAlert(severity: SeverityLevel) {
+        viewModelScope.launch {
+            val userId = getCurrentUserId()
+            if (userId == null) {
+                Log.e("HomeViewModel", "Cannot send alert: No authenticated user")
+                return@launch
+            }
+
+            val loc = _locationState.value as? LocationUiState.Available
+            val alert = Alert(
+                user_id = userId,
+                latitude = loc?.latitude,
+                longitude = loc?.longitude,
+                severity = severity.name,
+                is_offline = false
+            )
+
+            alertRepository.sendAlert(alert)
+                .onSuccess {
+                    _showToast.value = true
+                    delay(3000)
+                    _showToast.value = false
+                }
+                .onFailure { e ->
+                    Log.e("HomeViewModel", "Failed to send alert", e)
+                }
         }
     }
 
@@ -140,11 +155,6 @@ class HomeViewModel(
     fun onSeverityClick(severity: SeverityLevel) {
         _selectedSeverity.value = severity
         _showSheet.value = true
-    }
-
-    fun onConfirmSheet() {
-        _showSheet.value = false
-        // TODO: Send alert with severity
     }
 
     fun onDismissSheet() {

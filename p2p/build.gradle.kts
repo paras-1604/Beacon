@@ -33,6 +33,9 @@ android {
 dependencies {
 
     implementation(project(":core"))
+
+    // for logging, utilities
+    implementation(libs.play.services.nearby.v1920)
     // Nearby Connections
     implementation(libs.play.services.nearby)
     implementation(libs.androidx.core.ktx)
