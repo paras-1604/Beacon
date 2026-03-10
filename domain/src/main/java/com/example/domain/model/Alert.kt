@@ -8,5 +8,7 @@ data class Alert(
     val latitude: Double?,
     val longitude: Double?,
     val severity: String,
-    val is_offline: Boolean = false
+    val is_offline: Boolean = false,
+    val timestamp: String? = null,
+    val updated_at: String? = null
 )

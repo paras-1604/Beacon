@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -41,33 +42,29 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    // Supabase BOM (Bill of Materials) - use latest version
-    api(platform(libs.bom.v300))
-
-    // Supabase modules you'll need
-    api(libs.supabase.postgrest.kt)  // Database
-    api(libs.supabase.auth.kt)       // Authentication
-    api(libs.supabase.realtime.kt)   // Real-time (for later)
-
-    // Ktor client for Android
-    api(libs.ktor.client.android)
-
-
+    
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
 
-    // Kotlin serialization
+    // Ktor
+    implementation(libs.ktor.client.core)
+    api(libs.ktor.client.okhttp)
+    api(libs.ktor.client.websockets)
+    implementation(libs.ktor.client.android)
+
+    // Supabase
+    api(platform(libs.bom.v300))
+    api(libs.supabase.postgrest.kt)
+    api(libs.supabase.auth.kt)
+    api(libs.supabase.realtime.kt)
+
+    // Serialization
     implementation(libs.kotlinx.serialization.json)
 
-
+    // Location & Room
     implementation(libs.play.services.location)
-
-    // Room
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx) // For Kotlin coroutines support
+    implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
-//    ksp(libs.androidx.room.compiler.v250)
 }

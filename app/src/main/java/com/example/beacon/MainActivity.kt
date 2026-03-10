@@ -23,16 +23,22 @@ import com.example.data.repository.ContactRepositoryImpl
 import com.example.data.repository.LocationRepositoryImpl
 import com.example.data.repository.PreferencesRepositoryImpl
 import com.example.presentation.components.BottomNavBar
+import com.example.presentation.screens.alerts.ReceivedAlertsScreen
+import com.example.presentation.screens.alerts.ReceivedAlertsViewModel
 import com.example.presentation.screens.auth.AuthScreen
 import com.example.presentation.screens.contacts.ContactsScreen
 import com.example.presentation.screens.contacts.ContactsViewModel
 import com.example.presentation.screens.home.HomeScreen
 import com.example.presentation.screens.home.HomeViewModel
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.realtime.realtime
 
 
 class MainActivity : ComponentActivity() {
 
     private val authRepository = AuthRepository()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BeaconTheme {
+
+
+
                 var isAuthenticated by remember { mutableStateOf(false) }
                 var isLoading by remember { mutableStateOf(true) }
 
@@ -107,6 +116,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable("contacts") {
                                     ContactsScreen(viewModel = contactsViewModel)
+                                }
+
+                                // Inside NavHost, after existing routes
+                                composable("alerts") {
+                                    // Get current user ID
+                                    val currentUserId = SupabaseClient.client.auth.currentUserOrNull()?.id ?: "unknown"
+                                    // Create ViewModel with repository and userId
+                                    val viewModel: ReceivedAlertsViewModel = remember {
+                                        ReceivedAlertsViewModel(alertRepository, currentUserId)
+                                    }
+                                    ReceivedAlertsScreen(viewModel = viewModel)
                                 }
                                 composable("settings") {
                                     // Placeholder for settings

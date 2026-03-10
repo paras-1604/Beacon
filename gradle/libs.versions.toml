@@ -14,6 +14,10 @@ kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCoroutinesPlayServices = "1.10.2"
 kotlinxSerializationJson = "1.10.0"
 ktorClientAndroid = "3.4.0"
+ktorClientAndroidVersion = "2.3.12"
+ktorClientCore = "3.4.1"
+ktorClientOkhttp = "3.4.1"
+ktorClientWebsockets = "3.4.1"
 ktorClientEngine_z = "KTOR_VERSION"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.12.2"
@@ -21,12 +25,14 @@ composeBom = "2024.09.00"
 benchmarkTraceprocessor = "1.4.1"
 lifecycleViewmodelCompose = "2.10.0"
 lifecycleViewmodelComposeVersion = "2.8.7"
+lifecycleRuntimeCompose = "2.8.7"
 materialIconsExtended = "1.7.8"
 navigationCompose = "2.9.7"
 navigationComposeVersion = "2.8.5"
 playServicesLocation = "21.3.0"
 playServicesNearby = "19.3.0"
 playServicesNearbyVersion = "19.2.0"
+realtimeKt = "3.4.1"
 roomCompiler = "2.5.0"
 roomRuntime = "2.8.4"
 uiGraphics = "1.10.1"
@@ -43,6 +49,7 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 androidx-activity-compose-v193 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-compose-bom-v20250200 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-compose-v287 = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelComposeVersion" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -58,12 +65,13 @@ androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview
 auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
 bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 bom-v300 = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bomVersion" }
+github-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "realtimeKt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -83,6 +91,10 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
+ktor-client-android-v2312 = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroidVersion" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorClientWebsockets" }
 ktor-client-engine_z = { module = "io.ktor:ktor-client-[engine]", version.ref = "ktorClientEngine_z" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }

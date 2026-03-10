@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -33,7 +34,8 @@ fun BottomNavBar(
     val items = listOf(
         NavItem("home", Icons.Default.Home, "HOME"),
         NavItem("contacts", Icons.Default.People, "CONTACTS"),
-        NavItem("settings", Icons.Default.Settings, "SETTINGS")
+        NavItem("alerts", Icons.Default.Notifications, "ALERTS"),  // new item
+//        NavItem("settings", Icons.Default.Settings, "SETTINGS")
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
