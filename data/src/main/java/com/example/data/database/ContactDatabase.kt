@@ -6,17 +6,20 @@ import com.example.data.database.dao.ContactDao
 import com.example.data.database.dao.LocationDao
 import com.example.data.database.entity.ContactEntity
 import com.example.data.database.entity.LocationEntity
-
+import com.example.data.database.entity.ReceivedAlertEntity   // add this import
+import com.example.data.database.dao.ReceivedAlertDao
 
 @Database(
-    entities = [ContactEntity::class, LocationEntity::class],
-    version = 2,
+    entities = [ContactEntity::class, LocationEntity::class,  ReceivedAlertEntity::class ],
+    version = 3,
     exportSchema = false
 )
 abstract class ContactDatabase : RoomDatabase() {
     abstract fun contactDao(): ContactDao
 
     abstract fun locationDao(): LocationDao
+
+    abstract fun receivedAlertDao(): ReceivedAlertDao
 
     companion object {
         @Volatile

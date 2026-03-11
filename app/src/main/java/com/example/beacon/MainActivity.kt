@@ -1,6 +1,5 @@
 package com.example.beacon
 
-
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -31,14 +30,10 @@ import com.example.presentation.screens.contacts.ContactsViewModel
 import com.example.presentation.screens.home.HomeScreen
 import com.example.presentation.screens.home.HomeViewModel
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.realtime.realtime
-
 
 class MainActivity : ComponentActivity() {
 
     private val authRepository = AuthRepository()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +42,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BeaconTheme {
-
-
-
                 var isAuthenticated by remember { mutableStateOf(false) }
                 var isLoading by remember { mutableStateOf(true) }
 
@@ -66,15 +58,13 @@ class MainActivity : ComponentActivity() {
                 when {
                     isLoading -> {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            Text("Loading...", modifier = Modifier.align(Alignment.Center))
+                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                         }
                     }
                     isAuthenticated -> {
-                        // Get application context for database
                         val context = LocalContext.current
                         val beaconApp = context.applicationContext as BeaconApplication
 
-                        // Create repositories
                         val contactRepository = remember {
                             ContactRepositoryImpl(beaconApp.contactDatabase)
                         }
@@ -89,10 +79,13 @@ class MainActivity : ComponentActivity() {
                         }
 
                         val alertRepository = remember {
-                            AlertRepository(SupabaseClient.client)   // use your existing Supabase client
+                            AlertRepository(
+                                supabaseClient = SupabaseClient.client,
+                                database = beaconApp.contactDatabase,
+                                context = context
+                            )
                         }
 
-                        // Create ViewModels
                         val homeViewModel: HomeViewModel = remember {
                             HomeViewModel(preferencesRepository, locationRepository, alertRepository)
                         }
@@ -100,7 +93,6 @@ class MainActivity : ComponentActivity() {
                             ContactsViewModel(contactRepository)
                         }
 
-                        // Navigation
                         val navController = rememberNavController()
 
                         Scaffold(
@@ -117,19 +109,14 @@ class MainActivity : ComponentActivity() {
                                 composable("contacts") {
                                     ContactsScreen(viewModel = contactsViewModel)
                                 }
-
-                                // Inside NavHost, after existing routes
                                 composable("alerts") {
-                                    // Get current user ID
                                     val currentUserId = SupabaseClient.client.auth.currentUserOrNull()?.id ?: "unknown"
-                                    // Create ViewModel with repository and userId
                                     val viewModel: ReceivedAlertsViewModel = remember {
                                         ReceivedAlertsViewModel(alertRepository, currentUserId)
                                     }
                                     ReceivedAlertsScreen(viewModel = viewModel)
                                 }
                                 composable("settings") {
-                                    // Placeholder for settings
                                     Box(modifier = Modifier.fillMaxSize()) {
                                         Text("Settings", modifier = Modifier.align(Alignment.Center))
                                     }

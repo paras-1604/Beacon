@@ -43,6 +43,8 @@ runtime = "1.10.2"
 appcompat = "1.6.1"
 material = "1.10.0"
 foundationVersion = "1.10.3"
+uiText = "1.10.4"
+playServicesPlaces = "17.1.0"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -107,6 +109,8 @@ supabase-auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 supabase-realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundationVersion" }
+androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
+play-services-places = { group = "com.google.android.gms", name = "play-services-places", version.ref = "playServicesPlaces" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Alert(
+    val id: Long? = null,  // <-- add this
     val user_id: String,
     val latitude: Double?,
     val longitude: Double?,

@@ -2,29 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
+    <!-- Required for notifications on Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Required for Nearby Connections on Android 12+ -->
     <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
 
-    <!-- Bluetooth permissions (also needed on many devices) -->
+    <!-- Bluetooth permissions -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
-        android:maxSdkVersion="30" />   <!-- only needed on older versions? We'll keep simple -->
+        android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-    <!-- Location is required for Wi-Fi scanning on older devices, and for Bluetooth scanning on all devices -->
-
-
-
+    <!-- Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
-
     <uses-feature android:name="android.hardware.wifi" android:required="false" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+
     <application
         android:name=".BeaconApplication"
         android:allowBackup="true"
@@ -42,7 +39,6 @@
             android:theme="@style/Theme.Beacon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
